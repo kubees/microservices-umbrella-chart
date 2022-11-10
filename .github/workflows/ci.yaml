@@ -1,0 +1,26 @@
+name: Helm Chart CI Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Run checkov analysis
+        uses: bridgecrewio/checkov-action@master
+        id: checkov
+        with:
+          directory: microservices-umbrella-chart/
+          quiet: true 
+          framework: kubernetes 
+          output_format: sarif 
+          output_file_path: reports/results.sarif 
+          download_external_modules: true 
+          log_level: DEBUG
