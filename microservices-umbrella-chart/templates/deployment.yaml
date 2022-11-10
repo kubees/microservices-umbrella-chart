@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: {{ .Values.deployment.container.name }}
-          image: {{ .Values.deployment.container.image }}:{{ .Values.deployment.container.tag }}
+          image: {{ .Values.deployment.container.image }}{{ .Values.deployment.container.tag }}
           imagePullPolicy : Always
           env:
           {{- range .Values.deployment.container.env }}
