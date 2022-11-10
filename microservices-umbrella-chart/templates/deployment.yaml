@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Values.deployment.name }}
+  namespace: {{ .Values.deployment.namespace }}
   labels:
     app: {{ .Values.deployment.name }}
 spec:
@@ -14,10 +15,42 @@ spec:
       labels:
         app: {{ .Values.deployment.name }}
     spec:
+      automountServiceAccountToken: false
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: {{ .Values.deployment.container.name }}
-          image: {{ .Values.deployment.container.image }}{{ .Values.deployment.container.tag }}
+          image: {{ .Values.deployment.container.image }}@{{ .Values.deployment.container.digest }}
           imagePullPolicy : Always
+          livenessProbe:
+            httpGet:
+              port: {{ .Values.deployment.container.port }}
+              path: {{ .Values.deployment.container.healthPath }}
+          readinessProbe:
+            httpGet:
+              port: {{ .Values.deployment.container.port }}
+              path: {{ .Values.deployment.container.healthPath }}
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsUser: 10001
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            limits:
+              memory: {{ .Values.deployment.container.memoryLimit | default "500Mi" | quote }}
+              cpu: {{ .Values.deployment.container.cpuLimit | default "1" | quote }}
+            requests:
+              memory: {{ .Values.deployment.container.memoryRequest | default "250Mi" | quote }}
+              cpu: {{ .Values.deployment.container.cpuRequest | default ".5" | quote }}
           env:
           {{- range .Values.deployment.container.env }}
           - name: {{ .name | quote }}
