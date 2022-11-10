@@ -1,0 +1,15 @@
+deployment:
+  name: playlist-api
+  replicas: 1
+  container:
+    name: playlist-api-container
+    image: aimvector/service-mesh
+    tag: playlists-api-1.0.0
+    port: 5000
+    env:
+    - name: "ENVIRONMENT"
+      value: "DEBUG"
+    - name: "REDIS_HOST"
+      value: "playlists-db"
+    - name: "REDIS_PORT"
+      value: "6379"
