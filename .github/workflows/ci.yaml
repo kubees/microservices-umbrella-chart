@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@main
-      - name: Run checkov analysis
+      - name: Run Checkov Analysis
         uses: bridgecrewio/checkov-action@master
         id: checkov
         with:
@@ -23,4 +23,8 @@ jobs:
           output_format: sarif 
           output_file_path: reports/results.sarif
           download_external_modules: true
-          log_level: DEBUG
+      - name: Upload Analysis Report
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: reports/results.sarif
+          category: checkov-analysis
