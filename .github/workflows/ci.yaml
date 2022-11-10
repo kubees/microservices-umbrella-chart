@@ -23,8 +23,8 @@ jobs:
           output_format: sarif 
           output_file_path: reports/results.sarif
           download_external_modules: true
-      - name: Upload Analysis Report
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: reports/results.sarif
-          category: checkov-analysis
+#      - name: Upload Analysis Report
+#        uses: github/codeql-action/upload-sarif@v2
+#        with:
+#          sarif_file: reports/results.sarif
+#          category: checkov-analysis
