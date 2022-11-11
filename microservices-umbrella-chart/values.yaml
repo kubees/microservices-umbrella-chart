@@ -22,3 +22,12 @@ deployment:
 
 serviceAccount:
   name: playlist-api-sa
+
+service:
+  name: playlist-service
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      name: http
+      port: 10010
+      targetPort: 10010
