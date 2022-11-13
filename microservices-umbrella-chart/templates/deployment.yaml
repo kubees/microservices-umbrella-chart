@@ -22,6 +22,32 @@ spec:
         runAsUser: 1001
         seccompProfile:
           type: RuntimeDefault
+      initContainers:
+        - name: {{ .Values.deployment.initContainer.name }}
+          image: {{ .Values.deployment.initContainer.image }}@{{ .Values.deployment.initContainer.digest }}
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: {{ .Values.deployment.initContainer.memoryLimit | default "500Mi" | quote }}
+              cpu: {{ .Values.deployment.initContainer.cpuLimit | default "1" | quote }}
+            requests:
+              memory: {{ .Values.deployment.initContainer.memoryRequest | default "250Mi" | quote }}
+              cpu: {{ .Values.deployment.initContainer.cpuRequest | default ".5" | quote }}
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsUser: 10001
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+          env:
+          {{- range .Values.deployment.initContainer.env }}
+            - name: {{ .name | quote }}
+              value: {{ .value | quote }}
+          {{- end }}
       containers:
         - name: {{ .Values.deployment.container.name }}
           image: {{ .Values.deployment.container.image }}@{{ .Values.deployment.container.digest }}
