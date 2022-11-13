@@ -45,7 +45,9 @@ spec:
                 - ALL
           envFrom:
             - configMapRef:
-                name: {{ .Values.configmap.name }}
+                name: {{ .Values.initConfigMap.name }}
+            - secretRef:
+                name: {{ .Values.deployment.container.passwordSecretName }}
       containers:
         - name: {{ .Values.deployment.container.name }}
           image: {{ .Values.deployment.container.image }}@{{ .Values.deployment.container.digest }}
@@ -75,10 +77,11 @@ spec:
             requests:
               memory: {{ .Values.deployment.container.memoryRequest | default "250Mi" | quote }}
               cpu: {{ .Values.deployment.container.cpuRequest | default ".5" | quote }}
-          env:
-          {{- range .Values.deployment.container.env }}
-          - name: {{ .name | quote }}
-            value: {{ .value | quote }}
-          {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.configmap.name }}
+            - secretRef:
+                name: {{ .Values.deployment.container.passwordSecretName }}
+
           ports:
             - containerPort: {{ .Values.deployment.container.port }}
