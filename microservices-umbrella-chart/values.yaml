@@ -1,7 +1,8 @@
+global:
+  namespace: microservice
 deployment:
   name: playlist-api
   replicas: 1
-  namespace: microservices
   initContainer:
     name: data-seed
     image: ahmedgrati/data-seed-job
@@ -27,13 +28,6 @@ deployment:
     cpuRequest: .5
     port: 5000
     healthPath: /
-    env:
-    - name: "ENVIRONMENT"
-      value: "DEBUG"
-    - name: "REDIS_HOST"
-      value: "playlists-db"
-    - name: "REDIS_PORT"
-      value: "6379"
 
 serviceAccount:
   name: playlist-api-sa
@@ -46,3 +40,10 @@ service:
       name: http
       port: 10010
       targetPort: 10010
+
+configmap:
+  name: playlist-env
+  data:
+    ENVIRONMENT: DEBUG
+    REDIS_HOST: playlist-db
+    REDIS_PORT: 6379

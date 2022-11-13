@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Values.deployment.name }}
-  namespace: {{ .Values.deployment.namespace }}
+  namespace: {{ .Values.global.namespace }}
   labels:
     app: {{ .Values.deployment.name }}
 spec:
@@ -43,11 +43,9 @@ spec:
             capabilities:
               drop:
                 - ALL
-          env:
-          {{- range .Values.deployment.initContainer.env }}
-            - name: {{ .name | quote }}
-              value: {{ .value | quote }}
-          {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.configmap.name }}
       containers:
         - name: {{ .Values.deployment.container.name }}
           image: {{ .Values.deployment.container.image }}@{{ .Values.deployment.container.digest }}
