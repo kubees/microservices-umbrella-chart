@@ -2,6 +2,21 @@ deployment:
   name: playlist-api
   replicas: 1
   namespace: microservices
+  initContainer:
+    name: data-seed
+    image: ahmedgrati/data-seed-job
+    digest: sha256:f6b070283cc3d3f4d237f45ce8c81c59ac46c6f976eff97b2403ecff9dd554c2
+    memoryLimit: 500Mi
+    cpuLimit: 1
+    memoryRequest: 500Mi
+    cpuRequest: .5
+    env:
+    - name: "MICROSERVICE"
+      value: "playlist"
+    - name: "REDIS_HOST"
+      value: "playlists-db"
+    - name: "REDIS_PORT"
+      value: "6379"
   container:
     name: playlist-api-container
     image: aimvector/service-mesh
