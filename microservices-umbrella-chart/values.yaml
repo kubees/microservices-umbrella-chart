@@ -12,12 +12,6 @@ deployment:
     memoryRequest: 500Mi
     cpuRequest: .5
     env:
-    - name: "MICROSERVICE"
-      value: "playlist"
-    - name: "REDIS_HOST"
-      value: "playlists-db"
-    - name: "REDIS_PORT"
-      value: "6379"
   container:
     name: playlist-api-container
     image: aimvector/service-mesh
@@ -25,6 +19,7 @@ deployment:
     memoryLimit: 500Mi
     cpuLimit: 1
     memoryRequest: 500Mi
+    passwordSecretName: redis-secret
     cpuRequest: .5
     port: 5000
     healthPath: /
@@ -46,4 +41,11 @@ configmap:
   data:
     ENVIRONMENT: DEBUG
     REDIS_HOST: playlist-db
+    REDIS_PORT: 6379
+
+initConfigMap:
+  name: data-seed-env
+  data:
+    MICROSERVICE: playlist
+    REDIS_HOST: playlists-db
     REDIS_PORT: 6379
