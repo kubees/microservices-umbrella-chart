@@ -28,13 +28,6 @@ deployment:
     cpuRequest: .5
     port: 5000
     healthPath: /
-    env:
-    - name: "ENVIRONMENT"
-      value: "DEBUG"
-    - name: "REDIS_HOST"
-      value: "playlists-db"
-    - name: "REDIS_PORT"
-      value: "6379"
 
 serviceAccount:
   name: playlist-api-sa
