@@ -18,6 +18,7 @@ jobs:
         id: checkov
         with:
           directory: microservices-umbrella-chart/
+          skip: CKV_K8S_35
           quiet: true 
           framework: helm 
           output_format: sarif 
