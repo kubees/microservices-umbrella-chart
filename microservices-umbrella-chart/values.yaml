@@ -1,5 +1,6 @@
 global:
   namespace: microservice
+  databasePasswordSecret: redis-secret
 deployment:
   name: playlist-api
   replicas: 1
@@ -11,7 +12,6 @@ deployment:
     cpuLimit: 1
     memoryRequest: 500Mi
     cpuRequest: .5
-    env:
   container:
     name: playlist-api-container
     image: aimvector/service-mesh
@@ -19,7 +19,6 @@ deployment:
     memoryLimit: 500Mi
     cpuLimit: 1
     memoryRequest: 500Mi
-    passwordSecretName: redis-secret
     cpuRequest: .5
     port: 5000
     healthPath: /

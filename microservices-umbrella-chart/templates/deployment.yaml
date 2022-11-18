@@ -47,7 +47,7 @@ spec:
             - configMapRef:
                 name: {{ .Values.initConfigMap.name }}
             - secretRef:
-                name: {{ .Values.deployment.container.passwordSecretName }}
+                name: {{ .Values.global.databasePasswordSecret }}
       containers:
         - name: {{ .Values.deployment.container.name }}
           image: {{ .Values.deployment.container.image }}@{{ .Values.deployment.container.digest }}
@@ -81,7 +81,7 @@ spec:
             - configMapRef:
                 name: {{ .Values.configmap.name }}
             - secretRef:
-                name: {{ .Values.deployment.container.passwordSecretName }}
+                name: {{ .Values.global.databasePasswordSecret }}
 
           ports:
             - containerPort: {{ .Values.deployment.container.port }}
