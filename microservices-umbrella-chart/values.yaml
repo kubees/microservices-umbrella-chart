@@ -1,5 +1,5 @@
 global:
-  namespace: microservice
+  namespace: microservices
   databasePasswordSecret: redis-secret
 deployment:
   name: playlist-api
@@ -14,14 +14,24 @@ deployment:
     cpuRequest: .5
   container:
     name: playlist-api-container
-    image: aimvector/service-mesh
-    digest: sha256:d8ea43bf8dbc045df14a1b6b58c4927f9df3f67ff952fe5edb571cc8f9192674
+    image: ahmedgrati/playlist-ms
+    digest: sha256:15c77fc920ecf97247da6e2f39cb8697834d64b5dd6aed1dcdb30bda5c63ea42
     memoryLimit: 500Mi
     cpuLimit: 1
     memoryRequest: 500Mi
     cpuRequest: .5
-    port: 5000
-    healthPath: /
+    ports:
+      - name: application
+        port: 10010
+      - name: metrics
+        port: 8000
+    probe:
+      readinessProbe:
+        port: 10010
+        path: /healthz
+      livenessProbe:
+        port: 10010
+        path: /healthz
 
 serviceAccount:
   name: playlist-api-sa
@@ -34,6 +44,10 @@ service:
       name: http
       port: 10010
       targetPort: 10010
+    - protocol: TCP
+      name: metrics
+      port: 8000
+      targetPort: 8000
 
 configmap:
   name: playlist-env
@@ -48,3 +62,9 @@ initConfigMap:
     MICROSERVICE: playlist
     REDIS_HOST: playlists-db
     REDIS_PORT: 6379
+
+monitoring:
+  enabled: true
+  interval: 20s
+  targetPort: metrics
+  path: /
