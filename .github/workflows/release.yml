@@ -24,5 +24,5 @@ jobs:
         run: |
           curl --request POST \
           --form 'chart=@microservices-umbrella-chart-0.1.0.tgz' \
-          --user {{ secrets.GITLAB_USERNAME }}:{{ secrets.GITLAB_TOKEN }} \
+          --user ${{ secrets.GITLAB_USERNAME }}:${{ secrets.GITLAB_TOKEN }} \
           https://gitlab.com/api/v4/projects/41399774/packages/helm/api/stable/charts
