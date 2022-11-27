@@ -19,7 +19,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-1
       - name: Helm release
-        uses: shellbear/helm-release-action@v0.1
-        with:
-          repo: s3://all-helm-repository/charts
-          chart: ./microservices-umbrella-chart
+        run: |
+          helm package microservices-umbrella-chart --dependency-update
+          curl --request POST \                                                                                                                                  ─╯
+            --form 'chart=@microservices-umbrella-chart-0.1.0.tgz' \
+            --user {{ secrets.GITLAB_USERNAME }}:{{ secrets.GITLAB_TOKEN }} \
+            https://gitlab.com/api/v4/projects/41399774/packages/helm/api/stable/charts
