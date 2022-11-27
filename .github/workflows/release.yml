@@ -18,8 +18,8 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-1
-      - name: Helm release
-        uses: shellbear/helm-release-action@v0.1
+      - name: Publish Helm chart
+        uses: stefanprodan/helm-gh-pages@master
         with:
-          repo: https://all-helm-repository.s3.eu-west-1.amazonaws.com/charts/
-          chart: ./microservices-umbrella-chart
+          token: ${{ secrets.GITHUB_TOKEN }}
+          chart_dir: microservices-umbrella-chart
