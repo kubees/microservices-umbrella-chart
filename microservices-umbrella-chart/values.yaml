@@ -8,10 +8,10 @@ deployment:
     name: data-seed
     image: ahmedgrati/data-seed-job
     digest: sha256:f6b070283cc3d3f4d237f45ce8c81c59ac46c6f976eff97b2403ecff9dd554c2
-    memoryLimit: 500Mi
-    cpuLimit: 1
-    memoryRequest: 500Mi
-    cpuRequest: .5
+    memoryLimit: 100Mi
+    cpuLimit: 100m
+    memoryRequest: 75Mi
+    cpuRequest: 75m
   container:
     name: playlist-api-container
     image: ahmedgrati/playlist-ms
